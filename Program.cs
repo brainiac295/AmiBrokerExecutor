@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+
 
 namespace AmiBrokerExecutor
 {
@@ -15,8 +17,7 @@ namespace AmiBrokerExecutor
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World");
-            PlaceOrder(APIKey, QTY, "s");
+            Console.WriteLine("Hello World");         
         }
 
         public static void PlaceOrder(string Line,int QTY,string Type)
