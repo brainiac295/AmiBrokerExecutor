@@ -12,7 +12,7 @@ namespace AmiBrokerExecutor
     {
         public static string APIKey = "";
         public static string OrderUrl = "";
-        public static int QTY = 25;
+        public static int QTY = 1000;
 
 
         static void Main(string[] args)
