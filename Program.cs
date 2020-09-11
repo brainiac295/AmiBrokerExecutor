@@ -15,10 +15,12 @@ namespace AmiBrokerExecutor
     class Program
     {
         public static string APIKey = "";
-        public static string OrderUrl = "";
-        public static string QueryUrl = "";
-        public static int CurrencyQTY = 1000;
+        public static int CurrencyQTY = 2;
         public static int IndexQty = 25;
+
+        public static int StockOptionQTY = 4300;
+
+        public static string StockFutureName = "TATAMOTORS20SEPFUT";
         public static string OptionStartStr = "BANKNIFTY20917";
         public static string BANKNIFTYFUT = "BANKNIFTY20SEPFUT";
 
@@ -28,7 +30,7 @@ namespace AmiBrokerExecutor
             string Type = args[3];
             string Line = "";
 
-            string[] Files = Directory.GetFiles(Directory.GetCurrentDirectory());
+            string[] Files = Directory.GetFiles("C:\\Users\\Nos4A2\\");
             foreach (string F in Files)
             {
                 if (F.Contains(".txt"))
@@ -44,7 +46,6 @@ namespace AmiBrokerExecutor
 
             Console.WriteLine("Token:" + Line);
 
-
             if (args[0].Contains("USDINR") || args[0].Contains("INRUSD"))
             {
                 if (Type == "ShortSell")
@@ -54,8 +55,7 @@ namespace AmiBrokerExecutor
                 else
                 {
                     PlaceOrder(Line, (CurrencyQTY * 2), "b");
-                }
-                
+                }                
             } else if (args[0].Contains("BANKNIFTY"))
             {
                 RestClient restClient = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + BANKNIFTYFUT+"/ltp");
@@ -102,8 +102,11 @@ namespace AmiBrokerExecutor
                     var Resp = NewC.Execute(LTPRequest);
                     JObject result = JObject.Parse(Resp.Content);
                     float Price = Convert.ToSingle(result["data"]["ltp"].ToString());
-                    PlaceOrder(Line, IndexQty, "b", OptionToSell, Price);
+                    PlaceOrder(Line, IndexQty, "s", OptionToSell, Price);
                 }
+            } else if (args[0].Contains("TATAMOTORS"))
+            {
+                //Soon To Be Implemented
             }
         }
 
@@ -162,7 +165,7 @@ namespace AmiBrokerExecutor
                 NewObject.Add("price", (Price - 5));
             else
                 NewObject.Add("price", (Price + 5));
-            NewObject.Add("product", "I");
+            NewObject.Add("product", "d");
 
             request.AddJsonBody(NewObject.ToString());
             restClient.Execute(request);
