@@ -17,9 +17,7 @@ namespace AmiBrokerExecutor
         public static string APIKey = "";
         public static int CurrencyQTY = 2;
         public static int IndexQty = 25;
-
         public static int StockOptionQTY = 4300;
-
         public static string StockFutureName = "TATAMOTORS20SEPFUT";
         public static string OptionStartStr = "BANKNIFTY20917";
         public static string BANKNIFTYFUT = "BANKNIFTY20SEPFUT";
@@ -27,6 +25,7 @@ namespace AmiBrokerExecutor
         static void Main(string[] args)
         {
             Console.WriteLine("AmiBroker Executor For Upstox");
+            Console.WriteLine("Updated As of 14/09/2020");
             string Type = args[3];
             string Line = "";
 
