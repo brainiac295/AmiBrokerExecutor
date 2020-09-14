@@ -164,7 +164,7 @@ namespace AmiBrokerExecutor
                 NewObject.Add("price", (Price - 5));
             else
                 NewObject.Add("price", (Price + 5));
-            NewObject.Add("product", "d");
+            NewObject.Add("product", "I");
 
             request.AddJsonBody(NewObject.ToString());
             restClient.Execute(request);
