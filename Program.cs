@@ -83,6 +83,18 @@ namespace AmiBrokerExecutor
                     JObject result = JObject.Parse(Resp.Content);
                     float Price = Convert.ToSingle(result["data"]["ltp"].ToString());
                     PlaceOrder(Line, IndexQty, "s", OptionToSell,Price);
+
+                    LTP -= 600;
+                    string OptionToBuy = OptionStartStr + LTP.ToString() + "PE";
+                    RestClient NewC2 = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + OptionToBuy + "/ltp");
+                    RestRequest LTPGetRequest = new RestRequest(Method.GET);
+                    LTPGetRequest.AddHeader("authorization", "Bearer " + Line);
+                    LTPGetRequest.AddHeader("x-api-key", APIKey);
+
+                    var Resp2 = NewC2.Execute(LTPGetRequest);
+                    JObject Result = JObject.Parse(Resp2.Content);
+                    float Price2 = Convert.ToSingle(Result["data"]["ltp"].ToString());
+                    PlaceOptionBuy(Line, IndexQty, OptionToBuy, Price2);
                     
                 } else
                 {
@@ -102,6 +114,18 @@ namespace AmiBrokerExecutor
                     JObject result = JObject.Parse(Resp.Content);
                     float Price = Convert.ToSingle(result["data"]["ltp"].ToString());
                     PlaceOrder(Line, IndexQty, "s", OptionToSell, Price);
+                    
+                    LTP += 600;
+                    string OptionToBuy = OptionStartStr + LTP.ToString() + "CE";
+                    RestClient NewC2 = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + OptionToBuy + "/ltp");
+                    RestRequest LTPGetRequest = new RestRequest(Method.GET);
+                    LTPGetRequest.AddHeader("authorization", "Bearer " + Line);
+                    LTPGetRequest.AddHeader("x-api-key", APIKey);
+
+                    var Resp2 = NewC2.Execute(LTPGetRequest);
+                    JObject Result = JObject.Parse(Resp2.Content);
+                    float Price2 = Convert.ToSingle(Result["data"]["ltp"].ToString());
+                    PlaceOptionBuy(Line, IndexQty, OptionToBuy, Price2);
                 }
             } else if (args[0].Contains("TATAMOTORS"))
             {
@@ -165,6 +189,26 @@ namespace AmiBrokerExecutor
             else
                 NewObject.Add("price", (Price + 5));
             NewObject.Add("product", "I");
+
+            request.AddJsonBody(NewObject.ToString());
+            restClient.Execute(request);
+        }
+
+        public static void PlaceOptionBuy(string Line,int Qty,string OptionStr,float Price)
+        {
+            RestClient restClient = new RestClient("https://api.upstox.com/live/orders");
+            RestRequest request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "Bearer " + Line);
+            request.AddHeader("x-api-key", APIKey);
+
+            JObject NewObject = new JObject();
+            NewObject.Add("transaction_type", "b");
+            NewObject.Add("exchange", "nse_fo");
+            NewObject.Add("symbol", OptionStr);
+            NewObject.Add("quantity", Qty);
+            NewObject.Add("order_type", "l");
+            NewObject.Add("price", (Price + 5));
+            NewObject.Add("product", "D");
 
             request.AddJsonBody(NewObject.ToString());
             restClient.Execute(request);
