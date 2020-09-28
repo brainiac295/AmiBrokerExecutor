@@ -14,7 +14,7 @@ namespace AmiBrokerExecutor
 {
     class Program
     {
-        public static string APIKey = "";
+        public static string APIKey = "o9ZAnYkbqe9ZJr8D3wLAj4yghBmCBIhG4tnds9s9";
         public static int CurrencyQTY = 2;
         public static int IndexQty = 25;
         public static int StockOptionQTY = 4300;
@@ -25,7 +25,7 @@ namespace AmiBrokerExecutor
         static void Main(string[] args)
         {
             Console.WriteLine("AmiBroker Executor For Upstox");
-            Console.WriteLine("Updated As of 14/09/2020");
+            Console.WriteLine("Updated As of 17/SEP/2020");
             string Type = args[3];
             string Line = "";
 
@@ -45,6 +45,9 @@ namespace AmiBrokerExecutor
 
             Console.WriteLine("Token:" + Line);
 
+
+            #region Obsolete
+            /*
             if (args[0].Contains("USDINR") || args[0].Contains("INRUSD"))
             {
                 if (Type == "ShortSell")
@@ -127,11 +130,97 @@ namespace AmiBrokerExecutor
                     float Price2 = Convert.ToSingle(Result["data"]["ltp"].ToString());
                     PlaceOptionBuy(Line, IndexQty, OptionToBuy, Price2);
                 }
-            } else if (args[0].Contains("TATAMOTORS"))
+            } else if (args[0].Contains("SWING"))
             {
+                RestClient client = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + BANKNIFTYFUT + "/ltp");
+                RestRequest request = new RestRequest(Method.GET);
+                request.AddHeader("authorization", "Bearer " + Line);
+                request.AddHeader("x-api-key", APIKey);
+
+
+                var IndexFutureResp = client.Execute(request);
+                JObject jObject = JObject.Parse(IndexFutureResp.Content);
+                float Price = Convert.ToSingle(jObject["data"]["ltp"].ToString());
+
+                Price = (int)Price;
+                Price /= 100;
+                Price = (int)Price;
+                Price *= 100;
+                string PutOption = OptionStartStr + (Price - 200).ToString() + "PE";
+                string CallOption = OptionStartStr + (Price + 200).ToString() + "CE";
+
+                client = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + PutOption + "/ltp");
+                RestRequest PutOptionRequest = new RestRequest(Method.GET);
+                PutOptionRequest.AddHeader("authorization", "Bearer " + Line);
+                PutOptionRequest.AddHeader("x-api-key", APIKey);
+
+                var PutResponse = client.Execute(PutOptionRequest);
+                JObject PutPrice = JObject.Parse(PutResponse.Content);
+                Price = Convert.ToSingle(PutPrice["data"]["ltp"].ToString());
+                Price += 5;
+
+                client = new RestClient("https://api.upstox.com/live/orders");
+                RestRequest PutOptionBuyRequest = new RestRequest(Method.POST);
+                PutOptionBuyRequest.AddHeader("authorization", "Bearer " + Line);
+                PutOptionBuyRequest.AddHeader("x-api-key", APIKey);
+
+                JObject PutOptionData = new JObject();
+                PutOptionData.Add("transaction_type", "b");
+                PutOptionData.Add("exchange", "nse_fo");
+                PutOptionData.Add("symbol", PutOption);
+                PutOptionData.Add("quantity", 25);
+                PutOptionData.Add("order_type", "l");
+                PutOptionData.Add("price", Price);
+                PutOptionData.Add("product", "D");
+
+                PutOptionBuyRequest.AddJsonBody(PutOptionData.ToString());
+
+                var PutOptionOrderResponse = client.Execute(PutOptionBuyRequest);
+
+                client = new RestClient("https://api.upstox.com/live/feed/now/nse_fo/" + CallOption + "/ltp");
+                RestRequest CallOptionRequest = new RestRequest(Method.GET);
+                CallOptionRequest.AddHeader("authorization", "Bearer " + Line);
+                CallOptionRequest.AddHeader("x-api-key", APIKey);
+
+                var CallResponse = client.Execute(CallOptionRequest);
+                JObject CallPrice = JObject.Parse(CallResponse.Content);
+                Price = Convert.ToSingle(CallPrice["data"]["ltp"].ToString());
+                Price += 5;
+
+                client = new RestClient("https://api.upstox.com/live/orders");
+                RestRequest CallOptionBuyRequest = new RestRequest(Method.POST);
+                CallOptionBuyRequest.AddHeader("authorization", "Bearer " + Line);
+                CallOptionBuyRequest.AddHeader("x-api-key", APIKey);
+
+                JObject CallOptionData = new JObject();
+                CallOptionData.Add("transaction_type", "b");
+                CallOptionData.Add("exchange", "nse_fo");
+                CallOptionData.Add("symbol", CallOption);
+                CallOptionData.Add("quantity", 25);
+                CallOptionData.Add("order_type", "l");
+                CallOptionData.Add("price", Price);
+                CallOptionData.Add("product", "D");
+
+                CallOptionBuyRequest.AddJsonBody(CallOptionData.ToString());
+
+                var CallOptionOrderResponse = client.Execute(CallOptionBuyRequest);
+
                 //Soon To Be Implemented
             }
+            */
+            #endregion
+
+            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type="+Type+"&code="+Line);
+            RestRequest Request = new RestRequest(Method.GET);
+
+            Clinet.Execute(Request);
+
+            Console.WriteLine("Done");
+          
         }
+
+
+        #region ObsoleteFunctions
 
         public static void PlaceOrder(string Line,int QTY,string Type)
         {
@@ -213,5 +302,7 @@ namespace AmiBrokerExecutor
             request.AddJsonBody(NewObject.ToString());
             restClient.Execute(request);
         }
+
+        #endregion
     }
 }
