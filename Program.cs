@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
-using Newtonsoft;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 
 
@@ -15,18 +9,15 @@ namespace AmiBrokerExecutor
     class Program
     {
         public static string APIKey = "o9ZAnYkbqe9ZJr8D3wLAj4yghBmCBIhG4tnds9s9";
-        public static int CurrencyQTY = 2;
-        public static int IndexQty = 25;
-        public static int StockOptionQTY = 4300;
-        public static string StockFutureName = "TATAMOTORS20SEPFUT";
-        public static string OptionStartStr = "BANKNIFTY20917";
-        public static string BANKNIFTYFUT = "BANKNIFTY20SEPFUT";
+        
 
         static void Main(string[] args)
         {
             Console.WriteLine("AmiBroker Executor For Upstox");
-            Console.WriteLine("Updated As of 17/SEP/2020");
-            string Type = args[3];
+            Console.WriteLine("Updated As of 1/OCT/2020");
+            string Type = args[1];
+            string Price = args[3];
+            string QTy = args[2];
             string Line = "";
 
             string[] Files = Directory.GetFiles("C:\\Users\\Nos4A2\\");
@@ -210,13 +201,12 @@ namespace AmiBrokerExecutor
             */
             #endregion
 
-            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type="+Type+"&code="+Line);
+            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type=" + Type + "&code=" + Line + "&price=" + Price + "&qty=" + QTy);
             RestRequest Request = new RestRequest(Method.GET);
 
             Clinet.Execute(Request);
 
-            Console.WriteLine("Done");
-          
+            Console.WriteLine("Done");          
         }
 
 
