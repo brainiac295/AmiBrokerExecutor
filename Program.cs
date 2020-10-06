@@ -17,7 +17,7 @@ namespace AmiBrokerExecutor
             Console.WriteLine("Updated As of 1/OCT/2020");
             string Type = args[1];
             string Price = args[3];
-            string QTy = args[2];
+            string Qty = args[2];
             string Line = "";
 
             string[] Files = Directory.GetFiles("C:\\Users\\Nos4A2\\");
@@ -201,7 +201,7 @@ namespace AmiBrokerExecutor
             */
             #endregion
 
-            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type=" + Type + "&code=" + Line + "&price=" + Price + "&qty=" + QTy);
+            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type=" + Type + "&code=" + Line + "&price=" + Price + "&qty=" + Qty);
             RestRequest Request = new RestRequest(Method.GET);
 
             Clinet.Execute(Request);
