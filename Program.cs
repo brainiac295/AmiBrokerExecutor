@@ -10,15 +10,17 @@ namespace AmiBrokerExecutor
     {
         public static string APIKey = "o9ZAnYkbqe9ZJr8D3wLAj4yghBmCBIhG4tnds9s9";
         
-
         static void Main(string[] args)
         {
             Console.WriteLine("AmiBroker Executor For Upstox");
-            Console.WriteLine("Updated As of 1/OCT/2020");
+            Console.WriteLine("Updated As of 6/OCT/2020 At 12:36:00 PM");
+            Console.WriteLine(DateTime.Now.ToString());
             string Type = args[1];
             string Price = args[3];
             string Qty = args[2];
             string Line = "";
+
+
 
             string[] Files = Directory.GetFiles("C:\\Users\\Nos4A2\\");
             foreach (string F in Files)
@@ -36,6 +38,11 @@ namespace AmiBrokerExecutor
 
             Console.WriteLine("Token:" + Line);
 
+            int index = 0;
+            foreach (string A in args)
+                Console.WriteLine("Parameter {0}:{1}",index++,A);
+
+            Console.WriteLine(DateTime.Now.ToLongTimeString());
 
             #region Obsolete
             /*
@@ -201,12 +208,18 @@ namespace AmiBrokerExecutor
             */
             #endregion
 
+
             RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type=" + Type + "&code=" + Line + "&price=" + Price + "&qty=" + Qty);
             RestRequest Request = new RestRequest(Method.GET);
 
+            Console.WriteLine(DateTime.Now.ToLongTimeString());
+
             Clinet.Execute(Request);
 
-            Console.WriteLine("Done");          
+            Console.WriteLine("Done");
+            Console.WriteLine(DateTime.Now.ToLongTimeString());
+
+            Console.ReadLine();
         }
 
 
