@@ -15,7 +15,7 @@ namespace AmiBrokerExecutor
             Console.WriteLine(DateTime.Now.ToString());
             string Type = args[1];
             
-            RestClient Clinet = new RestClient("https://counter20200901203755.azurewebsites.net/api/IndexPlacer?type=" + Type);
+            RestClient Clinet = new RestClient("https://dvkorder.azurewebsites.net/api/IndexPlacer?type=" + Type);
             RestRequest Request = new RestRequest(Method.GET);
 
             Console.WriteLine(DateTime.Now.ToLongTimeString());
@@ -23,7 +23,8 @@ namespace AmiBrokerExecutor
             Clinet.Execute(Request);
 
             Console.WriteLine("Done");
-            Console.WriteLine(DateTime.Now.ToLongTimeString());            
+            Console.WriteLine(DateTime.Now.ToLongTimeString());
+            System.Threading.Thread.Sleep(5000);
         }
     }
 }
