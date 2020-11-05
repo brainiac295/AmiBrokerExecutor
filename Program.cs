@@ -10,17 +10,25 @@ namespace AmiBrokerExecutor
     {        
         static void Main(string[] args)
         {
-            Console.WriteLine("AmiBroker Executor For Upstox");
-            Console.WriteLine("Updated As of 20/OCT/2020 At 12:36:00 PM");
+            Console.WriteLine("AmiBroker Executor For Upstox & Firebase");
+            Console.WriteLine("Updated As of 05/NOV/2020 At 06:24:00 PM");
             Console.WriteLine(DateTime.Now.ToString());
             string Type = args[1];
-            
-            RestClient Clinet = new RestClient("https://dvkorder.azurewebsites.net/api/IndexPlacer?type=" + Type);
-            RestRequest Request = new RestRequest(Method.GET);
+            string Instrument = args[0];
+
+            if (Instrument.Contains("BANKNIFTY"))
+            {
+                RestClient Clinet = new RestClient("https://dvkorder.azurewebsites.net/api/IndexPlacer?type=" + Type);
+                RestRequest Request = new RestRequest(Method.GET);
+                Clinet.Execute(Request);
+            } else
+            {
+
+            }            
 
             Console.WriteLine(DateTime.Now.ToLongTimeString());
 
-            Clinet.Execute(Request);
+            
 
             Console.WriteLine("Done");
             Console.WriteLine(DateTime.Now.ToLongTimeString());
